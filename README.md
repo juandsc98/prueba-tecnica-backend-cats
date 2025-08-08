@@ -2,6 +2,14 @@
 
 Un backend REST robusto construido con Express.js y TypeScript, siguiendo los principios SOLID y Clean Architecture. Incluye autenticación JWT, base de datos MongoDB Atlas, y está completamente dockerizado.
 
+## 🚀 Estado del Proyecto
+
+- ✅ **Desarrollo**: Completado
+- ✅ **Dockerización**: Completada con Node.js 22
+- ✅ **Despliegue**: Activo en Render
+- 🔗 **URL**: https://prueba-tecnica-backend-cats.onrender.com/
+- 📊 **Health Check**: https://prueba-tecnica-backend-cats.onrender.com/health
+
 ## 🏗️ Arquitectura
 
 Este proyecto implementa **Clean Architecture** con las siguientes capas:
@@ -370,6 +378,15 @@ BCRYPT_ROUNDS=12
 ```
 
 ## 🚀 Despliegue
+
+### 🌐 Despliegue en Render (Activo)
+El backend está desplegado y funcionando en:
+**🔗 https://prueba-tecnica-backend-cats.onrender.com/**
+
+#### Endpoints disponibles:
+- **Health Check**: https://prueba-tecnica-backend-cats.onrender.com/health
+- **API Auth**: https://prueba-tecnica-backend-cats.onrender.com/api/auth/register
+- **API Users**: https://prueba-tecnica-backend-cats.onrender.com/api/users/profile
 
 ### Local con Docker
 ```bash
