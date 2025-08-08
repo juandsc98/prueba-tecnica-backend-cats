@@ -1,6 +1,6 @@
-import { User, UserWithoutPassword } from '@/domain/entities/User';
-import { IUserRepository } from '@/domain/repositories/IUserRepository';
-import { IAuthService } from '@/domain/services/IAuthService';
+import { User, UserWithoutPassword } from '../../../domain/entities/User';
+import { IUserRepository } from '../../../domain/repositories/IUserRepository';
+import { IAuthService } from '../../../domain/services/IAuthService';
 
 export interface RegisterUserRequest {
   nombre: string;

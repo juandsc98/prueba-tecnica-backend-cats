@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
-import { RegisterUserUseCase } from '@/application/use-cases/auth/RegisterUserUseCase';
-import { LoginUserUseCase } from '@/application/use-cases/auth/LoginUserUseCase';
-import { MongoUserRepository } from '@/infrastructure/repositories/MongoUserRepository';
-import { JwtAuthService } from '@/infrastructure/services/JwtAuthService';
+import { RegisterUserUseCase } from '../../application/use-cases/auth/RegisterUserUseCase';
+import { LoginUserUseCase } from '../../application/use-cases/auth/LoginUserUseCase';
+import { MongoUserRepository } from '../../infrastructure/repositories/MongoUserRepository';
+import { JwtAuthService } from '../../infrastructure/services/JwtAuthService';
 
 export class AuthController {
   private registerUserUseCase: RegisterUserUseCase;

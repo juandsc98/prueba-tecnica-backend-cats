@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { IAuthService } from '@/domain/services/IAuthService';
+import { IAuthService } from '../../domain/services/IAuthService';
 
 export class JwtAuthService implements IAuthService {
   private readonly jwtSecret: string;

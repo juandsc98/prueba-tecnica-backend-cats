@@ -1,5 +1,5 @@
-import { IUserRepository } from '@/domain/repositories/IUserRepository';
-import { IAuthService } from '@/domain/services/IAuthService';
+import { IUserRepository } from '../../../domain/repositories/IUserRepository';
+import { IAuthService } from '../../../domain/services/IAuthService';
 
 export interface LoginUserRequest {
   email: string;

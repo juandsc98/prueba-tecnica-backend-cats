@@ -1,4 +1,4 @@
-import { IUserRepository } from '@/domain/repositories/IUserRepository';
+import { IUserRepository } from '../../../domain/repositories/IUserRepository';
 
 export interface GetUserProfileRequest {
   userId: string;

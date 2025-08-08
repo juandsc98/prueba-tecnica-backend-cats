@@ -1,5 +1,5 @@
 import mongoose, { Document, Schema } from 'mongoose';
-import { User } from '@/domain/entities/User';
+import { User } from '../../domain/entities/User';
 
 export interface UserDocument extends Omit<User, 'id'>, Document {}
 

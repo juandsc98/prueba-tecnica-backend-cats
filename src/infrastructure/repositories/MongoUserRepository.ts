@@ -1,5 +1,5 @@
-import { User, UserWithoutPassword } from '@/domain/entities/User';
-import { IUserRepository } from '@/domain/repositories/IUserRepository';
+import { User, UserWithoutPassword } from '../../domain/entities/User';
+import { IUserRepository } from '../../domain/repositories/IUserRepository';
 import { UserModel } from '../database/UserModel';
 
 export class MongoUserRepository implements IUserRepository {

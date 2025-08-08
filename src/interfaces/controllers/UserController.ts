@@ -1,6 +1,6 @@
 import { Response } from 'express';
-import { GetUserProfileUseCase } from '@/application/use-cases/user/GetUserProfileUseCase';
-import { MongoUserRepository } from '@/infrastructure/repositories/MongoUserRepository';
+import { GetUserProfileUseCase } from '../../application/use-cases/user/GetUserProfileUseCase';
+import { MongoUserRepository } from '../../infrastructure/repositories/MongoUserRepository';
 import { AuthenticatedRequest } from '../middleware/authMiddleware';
 
 export class UserController {
