@@ -1,156 +1,163 @@
 # Backend REST con Express y TypeScript
 
-Un backend REST robusto construido con Express.js y TypeScript, siguiendo los principios de Clean Architecture y SOLID.
+Un backend REST robusto construido con Express.js y TypeScript, siguiendo los principios SOLID y Clean Architecture. Incluye autenticación JWT, base de datos MongoDB Atlas, y está completamente dockerizado.
 
 ## 🏗️ Arquitectura
 
-El proyecto sigue Clean Architecture con las siguientes capas:
+Este proyecto implementa **Clean Architecture** con las siguientes capas:
 
-- **Domain**: Entidades, interfaces de repositorios y servicios
-- **Application**: Casos de uso (Use Cases)
+- **Domain**: Entidades y reglas de negocio
+- **Application**: Casos de uso y lógica de aplicación
 - **Infrastructure**: Implementaciones concretas (MongoDB, JWT)
 - **Interfaces**: Controladores, rutas y middleware
 
-## 🚀 Características
+## ✨ Características
 
-- ✅ Registro de usuarios con validación
-- ✅ Autenticación con JWT
-- ✅ Protección de rutas con middleware
-- ✅ Validación de datos
-- ✅ Manejo de errores centralizado
-- ✅ Logging con Morgan
-- ✅ Seguridad con Helmet y CORS
-- ✅ Conexión a MongoDB Atlas
-- ✅ TypeScript con configuración estricta
+- ✅ **Autenticación JWT** con bcryptjs
+- ✅ **Base de datos MongoDB Atlas** con Mongoose
+- ✅ **Validación de datos** robusta
+- ✅ **Manejo de errores** centralizado
+- ✅ **Logging** con Morgan
+- ✅ **Seguridad** con Helmet y CORS
+- ✅ **Dockerización completa** con Node.js 22
+- ✅ **Health checks** y monitoreo
+- ✅ **TypeScript** con configuración estricta
 
 ## 📋 Requisitos
 
-- Node.js (v16 o superior)
+- Node.js 18+ o Docker
 - MongoDB Atlas (cluster gratuito)
-- npm o yarn
+- **Variables de entorno** (se envían por correo)
 
-## 🛠️ Instalación
+## 🚀 Instalación Local
 
-### Opción 1: Instalación Local
-
-1. **Clonar el repositorio**
+### 1. Clonar el repositorio
 ```bash
-git clone <repository-url>
+git clone <url-del-repositorio>
 cd prueba-backend
 ```
 
-2. **Instalar dependencias**
+### 2. Instalar dependencias
 ```bash
 npm install
 ```
 
-3. **Configurar variables de entorno**
-```bash
-cp env.example .env
-```
+### 3. Configurar variables de entorno
+Crear archivo `.env` en la raíz del proyecto con las siguientes variables (se envían por correo):
 
-Editar el archivo `.env` con tus credenciales:
 ```env
-# Configuración del servidor
 PORT=3000
 NODE_ENV=development
-
-# MongoDB Atlas
-MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/database?retryWrites=true&w=majority
-
-# JWT
-JWT_SECRET=your-super-secret-jwt-key-here
+MONGODB_URI=mongodb+srv://usuario:contraseña@cluster.mongodb.net/database
+JWT_SECRET=tu-super-secreto-jwt-key
 JWT_EXPIRES_IN=24h
-
-# Configuración de la aplicación
 BCRYPT_ROUNDS=12
 ```
 
-4. **Compilar TypeScript**
-```bash
-npm run build
-```
-
-5. **Ejecutar en desarrollo**
+### 4. Ejecutar en desarrollo
 ```bash
 npm run dev
 ```
 
-6. **Ejecutar en producción**
+### 5. Compilar para producción
 ```bash
+npm run build
 npm start
 ```
 
-### Opción 2: Docker (Recomendado)
+## 🐳 Dockerización
 
-#### 🐳 Usando Docker Compose (Más fácil)
+El proyecto está completamente dockerizado con **Node.js 22** y utiliza un **multi-stage build** para optimizar el tamaño de la imagen.
 
-1. **Clonar el repositorio**
+### Docker Compose (Recomendado)
+
+#### Producción
 ```bash
-git clone <repository-url>
-cd prueba-backend
-```
-
-2. **Ejecutar en producción**
-```bash
+# Construir y ejecutar en producción
 docker-compose up -d
-```
 
-3. **Ejecutar en desarrollo**
-```bash
-docker-compose -f docker-compose.yml -f docker-compose.override.yml up
-```
-
-4. **Ver logs**
-```bash
+# Ver logs
 docker-compose logs -f backend
-```
 
-5. **Detener servicios**
-```bash
+# Detener servicios
 docker-compose down
 ```
 
-#### 🐳 Usando Docker directamente
+#### Desarrollo
+```bash
+# Ejecutar en modo desarrollo con hot-reload
+docker-compose --profile dev up -d
 
-1. **Construir la imagen**
+# Ver logs del desarrollo
+docker-compose logs -f backend-dev
+```
+
+### Docker Directo
+
+#### Construir imagen
 ```bash
 docker build -t prueba-backend .
 ```
 
-2. **Ejecutar el contenedor**
+#### Ejecutar contenedor
 ```bash
+# Producción
 docker run -d \
   --name prueba-backend \
   -p 3000:3000 \
-  -e MONGODB_URI="mongodb+srv://juan98:I4mD3v3l0p3r**@cluster0.2avrkut.mongodb.net/prueba-backend?retryWrites=true&w=majority" \
-  -e JWT_SECRET="mi-super-secreto-jwt-key-para-prueba-tecnica-2024" \
+  -e NODE_ENV=production \
+  -e MONGODB_URI=mongodb+srv://usuario:contraseña@cluster.mongodb.net/database \
+  -e JWT_SECRET=tu-super-secreto-jwt-key \
   prueba-backend
+
+# Desarrollo
+docker run -d \
+  --name prueba-backend-dev \
+  -p 3001:3000 \
+  -v $(pwd)/src:/app/src \
+  -e NODE_ENV=development \
+  -e MONGODB_URI=mongodb+srv://usuario:contraseña@cluster.mongodb.net/database \
+  -e JWT_SECRET=tu-super-secreto-jwt-key \
+  prueba-backend npm run dev
 ```
 
-3. **Ver logs**
+### Scripts de Conveniencia
+
+#### Linux/Mac
 ```bash
-docker logs -f prueba-backend
+# Dar permisos de ejecución
+chmod +x scripts/docker.sh
+
+# Usar el script
+./scripts/docker.sh build    # Construir imagen
+./scripts/docker.sh up       # Ejecutar producción
+./scripts/docker.sh dev      # Ejecutar desarrollo
+./scripts/docker.sh logs     # Ver logs
+./scripts/docker.sh down     # Detener servicios
 ```
 
-4. **Detener contenedor**
-```bash
-docker stop prueba-backend
-docker rm prueba-backend
+#### Windows
+```cmd
+# Usar el script
+scripts\docker.bat build     # Construir imagen
+scripts\docker.bat up        # Ejecutar producción
+scripts\docker.bat dev       # Ejecutar desarrollo
+scripts\docker.bat logs      # Ver logs
+scripts\docker.bat down      # Detener servicios
 ```
 
-## 📚 API Endpoints
+## 📡 Endpoints de la API
 
 ### Autenticación
 
 #### POST `/api/auth/register`
-Registra un nuevo usuario.
+Registrar un nuevo usuario.
 
 **Body:**
 ```json
 {
   "nombre": "Juan Pérez",
-  "email": "juan@example.com",
+  "email": "juan@ejemplo.com",
   "password": "123456",
   "telefono": "1234567890",
   "edad": 25
@@ -164,13 +171,13 @@ Registra un nuevo usuario.
   "message": "Usuario registrado exitosamente",
   "data": {
     "user": {
-      "id": "64f1a2b3c4d5e6f7g8h9i0j1",
+      "id": "64f8a1b2c3d4e5f6a7b8c9d0",
       "nombre": "Juan Pérez",
-      "email": "juan@example.com",
+      "email": "juan@ejemplo.com",
       "telefono": "1234567890",
       "edad": 25,
-      "createdAt": "2023-09-01T10:00:00.000Z",
-      "updatedAt": "2023-09-01T10:00:00.000Z"
+      "createdAt": "2024-01-15T10:30:00.000Z",
+      "updatedAt": "2024-01-15T10:30:00.000Z"
     },
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
   }
@@ -178,12 +185,12 @@ Registra un nuevo usuario.
 ```
 
 #### POST `/api/auth/login`
-Autentica un usuario existente.
+Iniciar sesión.
 
 **Body:**
 ```json
 {
-  "email": "juan@example.com",
+  "email": "juan@ejemplo.com",
   "password": "123456"
 }
 ```
@@ -195,9 +202,9 @@ Autentica un usuario existente.
   "message": "Login exitoso",
   "data": {
     "user": {
-      "id": "64f1a2b3c4d5e6f7g8h9i0j1",
+      "id": "64f8a1b2c3d4e5f6a7b8c9d0",
       "nombre": "Juan Pérez",
-      "email": "juan@example.com",
+      "email": "juan@ejemplo.com",
       "telefono": "1234567890",
       "edad": 25
     },
@@ -209,7 +216,7 @@ Autentica un usuario existente.
 ### Usuarios (Protegido)
 
 #### GET `/api/users/profile`
-Obtiene el perfil del usuario autenticado.
+Obtener perfil del usuario autenticado.
 
 **Headers:**
 ```
@@ -222,13 +229,13 @@ Authorization: Bearer <token>
   "success": true,
   "message": "Perfil obtenido exitosamente",
   "data": {
-    "id": "64f1a2b3c4d5e6f7g8h9i0j1",
+    "id": "64f8a1b2c3d4e5f6a7b8c9d0",
     "nombre": "Juan Pérez",
-    "email": "juan@example.com",
+    "email": "juan@ejemplo.com",
     "telefono": "1234567890",
     "edad": 25,
-    "createdAt": "2023-09-01T10:00:00.000Z",
-    "updatedAt": "2023-09-01T10:00:00.000Z"
+    "createdAt": "2024-01-15T10:30:00.000Z",
+    "updatedAt": "2024-01-15T10:30:00.000Z"
   }
 }
 ```
@@ -236,24 +243,34 @@ Authorization: Bearer <token>
 ### Health Check
 
 #### GET `/health`
-Verifica el estado del servidor.
+Verificar el estado del servidor.
 
 **Response:**
 ```json
 {
-  "success": true,
-  "message": "Servidor funcionando correctamente",
-  "timestamp": "2023-09-01T10:00:00.000Z",
-  "environment": "development"
+  "status": "OK",
+  "timestamp": "2024-01-15T10:30:00.000Z",
+  "uptime": 123.456,
+  "environment": "production"
 }
 ```
 
 ## 🔐 Autenticación
 
-Para acceder a rutas protegidas, incluye el token JWT en el header:
+El sistema utiliza **JWT (JSON Web Tokens)** para la autenticación:
 
-```
-Authorization: Bearer <token>
+1. **Registro**: El usuario se registra y recibe un token JWT
+2. **Login**: El usuario inicia sesión y recibe un token JWT
+3. **Acceso protegido**: Incluir el token en el header `Authorization: Bearer <token>`
+
+### Estructura del Token
+```json
+{
+  "userId": "64f8a1b2c3d4e5f6a7b8c9d0",
+  "email": "juan@ejemplo.com",
+  "iat": 1705312200,
+  "exp": 1705398600
+}
 ```
 
 ## 📁 Estructura del Proyecto
@@ -261,94 +278,120 @@ Authorization: Bearer <token>
 ```
 src/
 ├── domain/                 # Capa de dominio
-│   ├── entities/          # Entidades del negocio
+│   ├── entities/          # Entidades de negocio
 │   ├── repositories/      # Interfaces de repositorios
 │   └── services/          # Interfaces de servicios
 ├── application/           # Capa de aplicación
 │   └── use-cases/        # Casos de uso
+│       ├── auth/         # Casos de uso de autenticación
+│       └── user/         # Casos de uso de usuarios
 ├── infrastructure/        # Capa de infraestructura
-│   ├── database/         # Configuración de BD
+│   ├── database/         # Configuración de base de datos
 │   ├── repositories/     # Implementaciones de repositorios
 │   └── services/         # Implementaciones de servicios
 └── interfaces/           # Capa de interfaces
-    ├── controllers/      # Controladores
-    ├── middleware/       # Middleware
-    └── routes/          # Rutas
+    ├── controllers/      # Controladores HTTP
+    ├── middleware/       # Middleware personalizado
+    └── routes/          # Definición de rutas
 ```
 
-## 🧪 Validaciones
+## ✅ Validaciones
 
+### Usuario
 - **Nombre**: Mínimo 2 caracteres
 - **Email**: Formato válido y único
 - **Contraseña**: Mínimo 6 caracteres
 - **Teléfono**: Mínimo 8 dígitos
 - **Edad**: Entre 1 y 120 años
 
+### Base de Datos
+- **Índices únicos** en email
+- **Validaciones de esquema** con Mongoose
+- **Timestamps** automáticos (createdAt, updatedAt)
+
 ## 🔒 Seguridad
 
-- Contraseñas hasheadas con bcrypt
-- Tokens JWT para autenticación
-- Headers de seguridad con Helmet
-- CORS configurado
-- Validación de entrada
-- Manejo seguro de errores
+- **Helmet**: Headers de seguridad HTTP
+- **CORS**: Configuración de origen cruzado
+- **bcryptjs**: Hashing seguro de contraseñas
+- **JWT**: Tokens seguros con expiración
+- **Validación**: Sanitización de datos de entrada
+- **Usuario no-root**: Contenedor Docker ejecutado como usuario no privilegiado
 
-## 🚀 Scripts Disponibles
+## 📝 Scripts Disponibles
 
-### Scripts NPM
-- `npm run dev`: Ejecuta en modo desarrollo con hot reload
-- `npm run build`: Compila TypeScript
-- `npm start`: Ejecuta en modo producción
-- `npm test`: Ejecuta tests (pendiente)
-
-### Scripts Docker
-- `docker-compose up -d`: Ejecuta en producción
-- `docker-compose up`: Ejecuta en desarrollo
-- `docker-compose down`: Detiene todos los servicios
-- `docker-compose logs -f backend`: Ver logs en tiempo real
-- `docker build -t prueba-backend .`: Construir imagen
-- `docker run -p 3000:3000 prueba-backend`: Ejecutar contenedor
-
-### Scripts de Conveniencia
-**Linux/Mac:**
 ```bash
-chmod +x scripts/docker.sh
-./scripts/docker.sh build    # Construir imagen
-./scripts/docker.sh up       # Levantar en producción
-./scripts/docker.sh dev      # Levantar en desarrollo
-./scripts/docker.sh down     # Detener servicios
-./scripts/docker.sh logs     # Ver logs
-./scripts/docker.sh clean    # Limpiar todo
+npm run dev          # Desarrollo con hot-reload
+npm run build        # Compilar TypeScript
+npm start            # Ejecutar en producción
+npm run test         # Ejecutar tests (futuro)
+npm run lint         # Linting (futuro)
 ```
 
-**Windows:**
-```cmd
-scripts\docker.bat build     # Construir imagen
-scripts\docker.bat up        # Levantar en producción
-scripts\docker.bat dev       # Levantar en desarrollo
-scripts\docker.bat down      # Detener servicios
-scripts\docker.bat logs      # Ver logs
-scripts\docker.bat clean     # Limpiar todo
+## 🐳 Configuración Docker
+
+### Dockerfile
+- **Multi-stage build** para optimizar tamaño
+- **Node.js 22 Alpine** para seguridad y rendimiento
+- **Usuario no-root** para seguridad
+- **Health checks** integrados
+
+### Docker Compose
+- **Servicio de producción** con optimizaciones
+- **Servicio de desarrollo** con hot-reload
+- **Variables de entorno** configurables
+- **Volúmenes** para desarrollo
+
+## 📊 Monitoreo
+
+- **Health checks** automáticos
+- **Logs estructurados** con timestamps
+- **Métricas de rendimiento** (uptime, memoria)
+- **Estado de conexión** a MongoDB
+
+## 🔧 Variables de Entorno
+
+**Nota**: Las variables de entorno completas se envían por correo electrónico.
+
+```env
+# Servidor
+PORT=3000
+NODE_ENV=development|production
+
+# Base de datos
+MONGODB_URI=mongodb+srv://usuario:contraseña@cluster.mongodb.net/database
+
+# JWT
+JWT_SECRET=tu-super-secreto-jwt-key
+JWT_EXPIRES_IN=24h
+
+# Seguridad
+BCRYPT_ROUNDS=12
 ```
 
-## 📝 Notas de Desarrollo
+## 🚀 Despliegue
 
-- El proyecto usa TypeScript con configuración estricta
-- Sigue principios SOLID y Clean Architecture
-- Implementa patrón Repository para acceso a datos
-- Usa inyección de dependencias
-- Manejo centralizado de errores
-- Logging estructurado
+### Local con Docker
+```bash
+# Producción
+docker-compose up -d
 
-## 🤝 Contribución
+# Desarrollo
+docker-compose --profile dev up -d
+```
 
-1. Fork el proyecto
-2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abre un Pull Request
+### Cloud (AWS, GCP, Azure)
+1. Construir imagen Docker
+2. Subir a registro de contenedores
+3. Desplegar en servicio de contenedores
+4. Configurar variables de entorno
+5. Configurar balanceador de carga
 
-## 📄 Licencia
+## 📞 Soporte
 
-Este proyecto está bajo la Licencia ISC.
+Para cualquier consulta sobre las variables de entorno o configuración, revisar el correo electrónico enviado con los detalles completos del proyecto.
+
+---
+
+**Desarrollado con ❤️ siguiendo Clean Architecture y principios SOLID**
 
